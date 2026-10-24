@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Hunter</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #050a05;
+    color: #39ff88;
+    font-family: monospace;
+    padding: 20px;
+  }
+  main {
+    max-width: 500px;
+    margin: 25px auto;
+    border: 1px solid #1e8b50;
+    padding: 22px;
+    box-shadow: 0 0 18px #064d28;
+  }
+  h1 { text-align: center; letter-spacing: 4px; }
+  .muted { color: #8aa895; font-size: 12px; }
+  label { display: block; margin-top: 15px; }
+  input {
+    width: 100%;
+    margin-top: 7px;
+    padding: 12px;
+    background: #0a150d;
+    color: #7dffa9;
+    border: 1px solid #247743;
+    font: inherit;
+  }
+  button {
+    margin-top: 18px;
+    padding: 12px;
+    width: 100%;
+    color: #001c0b;
+    background: #39ff88;
+    border: 0;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  #log {
+    margin-top: 20px;
+    padding: 12px;
+    background: #020602;
+    min-height: 85px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>DATA HUNTER</h1>
+  <p class="muted">SIMULATOR v1.0 // LOCAL MODE</p>
+  <p id="level">LEVEL: 1 | SCORE: 0</p>
+  <p>Masukkan data karakter simulasi untuk mendapatkan poin.</p>
+
+  <form id="game">
+    <label>Nama karakter
+      <input id="nama" required maxlength="40"
+             placeholder="Player01">
+    </label>
+
+    <label>Email fiktif
+      <input id="email" type="email" required
+             placeholder="player@example.com">
+    </label>
+
+    <label>Nomor HP fiktif
+      <input id="hp" required
+             placeholder="08xxxxxxxxxx">
+    </label>
+
+    <label>Kode akses game
+      <input id="kode" type="password" required
+             minlength="4" maxlength="20"
+             placeholder="Kode simulasi">
+    </label>
+
+    <button type="submit">JALANKAN MISI</button>
+  </form>
+
+  <div id="log">[SYSTEM] Menunggu pemain...</div>
+  <button id="reset" type="button">RESET GAME</button>
+  <p class="muted">
+    Demo lokal. Gunakan data fiktif.
+    Kode akses tidak dikirim atau disimpan.
+  </p>
+</main>
+
+<script>
+  let score = 0;
+  let level = 1;
+
+  const form = document.getElementById("game");
+  const log = document.getElementById("log");
+  const levelText = document.getElementById("level");
+
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const nama = document.getElementById("nama").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const hp = document.getElementById("hp").value.trim();
+    const kode = document.getElementById("kode").value;
+
+    if (!nama || !email || !hp || !kode) return;
+
+    // Hanya memproses data selama game berjalan.
+    // Tidak ada pengiriman ke server.
+    score += 100;
+    level = Math.floor(score / 300) + 1;
+
+    log.textContent =
+      "[MISSION COMPLETE]\n" +
+      "Karakter: " + nama + "\n" +
+      "Email simulasi: " + email + "\n" +
+      "Nomor simulasi: " + hp + "\n" +
+      "Kode akses: [TIDAK DITAMPILKAN]\n" +
+      "Poin diperoleh: +100\n" +
+      "Status: Data diproses lokal.";
+
+    levelText.textContent =
+      "LEVEL: " + level + " | SCORE: " + score;
+
+    // Kosongkan kode akses segera setelah pemrosesan.
+    document.getElementById("kode").value = "";
+  });
+
+  document.getElementById("reset").addEventListener("click",
+    function() {
+      score = 0;
+      level = 1;
+      form.reset();
+      levelText.textContent = "LEVEL: 1 | SCORE: 0";
+      log.textContent = "[SYSTEM] Game direset.";
+    }
+  );
+</script>
+</body>
+</html>
